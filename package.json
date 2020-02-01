@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "x-ray": "^2.3.3"
+    "x-ray": "^2.3.4"
+  },
+  "devDependencies": {
+    "npm-check-updates": "^4.0.1"
   }
 }
