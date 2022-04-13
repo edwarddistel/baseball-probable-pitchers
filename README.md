@@ -8,7 +8,7 @@ This app pulls in a day's probable pitchers from the MLB.com website and returns
 2. In the repo directory, `npm install`
 3. Specify an output file in `index.js`, or leave it at the default `probable-pitchers.json`
 4. Specify a day, or leave it as-is for today
-5. Run `node index.js`
+5. Run `npm start`
 
 ## Returned JSON example
 
