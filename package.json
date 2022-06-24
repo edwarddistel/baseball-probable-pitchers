@@ -15,6 +15,6 @@
     "x-ray": "^2.3.4"
   },
   "devDependencies": {
-    "npm-check-updates": "^14.0.2"
+    "npm-check-updates": "^14.1.1"
   }
 }
