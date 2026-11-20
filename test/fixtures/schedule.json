@@ -1,0 +1,57 @@
+{
+  "copyright": "Synthetic fixture for tests; NOT real MLB games.",
+  "dates": [
+    {
+      "date": "2026-07-04",
+      "games": [
+        {
+          "gamePk": 888010,
+          "gameNumber": 2,
+          "gameDate": "2026-07-04T23:05:00Z",
+          "status": { "detailedState": "Scheduled" },
+          "teams": {
+            "away": {
+              "team": { "id": 147, "name": "New York Yankees", "abbreviation": "NYY" },
+              "probablePitcher": { "id": 13, "fullName": "Game Two Starter" }
+            },
+            "home": {
+              "team": { "id": 111, "name": "Boston Red Sox", "abbreviation": "BOS" },
+              "probablePitcher": { "id": 14, "fullName": "Game Two Opponent" }
+            }
+          }
+        },
+        {
+          "gamePk": 888009,
+          "gameNumber": 1,
+          "gameDate": "2026-07-04T17:05:00Z",
+          "status": { "detailedState": "Scheduled" },
+          "teams": {
+            "away": {
+              "team": { "id": 147, "name": "New York Yankees", "abbreviation": "NYY" },
+              "probablePitcher": { "id": 11, "fullName": "Game One Starter" }
+            },
+            "home": {
+              "team": { "id": 111, "name": "Boston Red Sox", "abbreviation": "BOS" },
+              "probablePitcher": { "id": 12, "fullName": "Game One Opponent" }
+            }
+          }
+        },
+        {
+          "gamePk": 888011,
+          "gameNumber": 1,
+          "gameDate": "2026-07-04T20:10:00Z",
+          "status": { "detailedState": "Pre-Game" },
+          "teams": {
+            "away": {
+              "team": { "id": 120, "name": "Washington Nationals", "abbreviation": "WSH" },
+              "probablePitcher": { "fullName": " Example Starter " }
+            },
+            "home": {
+              "team": { "id": 121, "name": "New York Mets", "abbreviation": "NYM" }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

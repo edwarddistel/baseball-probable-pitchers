@@ -1,85 +1,37 @@
-const xray = require('x-ray');
+'use strict';
 
-exports.mlbpitchers = {
+// Backward-compatible entry point for callers using:
+// require('./probables').mlbpitchers.getPitchers(date, callback)
+// Modern callers should use require('./src').getProbablePitchers(date).
+const { getProbablePitchers } = require('./src');
+const { MLB_TEAMS } = require('./src/format');
 
-    // Convert long form name to 3-letter abbreviation
-    teamShortCode: function(longName) {
-        const teams = {
-            Angels : "LAA",
-            Astros : "HOU",
-            Athletics : "OAK",
-            Braves : "ATL",
-            Brewers : "MIL",
-            Cardinals : "STL",
-            Cubs : "CHC",
-            Detroit : "DET",
-            "D-backs" : "ARI",
-            Dodgers : "LAD",
-            Giants : "SF",
-            Guardians: "CLE",
-            "Blue Jays" : "TOR",
-            Mariners : "SEA",
-            Marlins : "MIA",
-            Milwaukee : "MIL",
-            Mets : "NYM",
-            Nationals : "WSH",
-            Orioles : "BAL",
-            Padres : "SD",
-            Phillies : "PHI",
-            Pirates : "PIT",
-            Rangers : "TEX",
-            Rays : "TB",
-            "Red Sox": "BOS",
-            Reds : "CIN",
-            Rockies : "COL",
-            Royals : "KC",
-            Tigers : "DET",
-            Twins : "MIN",
-            "White Sox": "CWS",
-            Yankees : "NYY"
-        };
-        return teams[longName];
-    },
+const LEGACY_ALIASES = Object.freeze({
+  'Detroit': 'DET',
+  'Milwaukee': 'MIL',
+  'Oakland': 'ATH',
+  'D-backs': 'ARI',
+});
 
-    // Format the raw data scraped via x-ray
-    formatResults: function (rawData, callback) {
-        const totalGames = rawData.teamAway.length;
-        const matchups = new Array(totalGames);
-        const teamPitchers = {};
-        for (let i = 0; i < totalGames; i++) {
-            let j = i*2;
-            matchups[i] = {
-                teamAway: rawData.teamAway[i].trim(),
-                teamHome: rawData.teamHome[i].trim(),
-                time: rawData.time[i].trim(),
-                pitcherAway: rawData.pitchers[j].trim(),
-                pitcherHome: rawData.pitchers[j+1].trim()
-            };
-            teamPitchers[this.teamShortCode(rawData.teamAway[i].trim())] = rawData.pitchers[j].trim();
-            teamPitchers[this.teamShortCode(rawData.teamHome[i].trim())] = rawData.pitchers[j+1].trim();
-        }
-        callback({"matchups" : matchups, "teamPitchers" : teamPitchers});
-    },
+function teamShortCode(longName) {
+  if (typeof longName !== 'string') return undefined;
+  const known = Object.values(MLB_TEAMS).find(({ name }) => name === longName);
+  return known?.code ?? LEGACY_ALIASES[longName];
+}
 
-    // Scrape probable pitchers
-    getPitchers: function (day, callback) {
-        const url = `https://www.mlb.com/probable-pitchers/${day}`;
-        const selector = {
-            teamAway: ['.probable-pitchers__team-name--away'],
-            teamHome: ['.probable-pitchers__team-name--home'],
-            time: ['time'],
-            pitchers: ['.probable-pitchers__pitcher-name']
+/**
+ * With a callback, retain the old single-argument success callback contract.
+ * The returned Promise always conveys errors, unlike the old swallowed error.
+ * Without a callback, use the returned Promise directly.
+ */
+function getPitchers(day, callback) {
+  if (callback !== undefined && typeof callback !== 'function') {
+    throw new TypeError('callback must be a function if supplied.');
+  }
 
-        };
+  const result = getProbablePitchers(day);
+  if (callback) return result.then((data) => { callback(data); return data; });
+  return result;
+}
 
-        const x = xray();
-        x(url, selector)((err, result) => {
-
-            if (err) {
-                return `Error in getPitchers: ${err}`;
-            } else {
-                this.formatResults(result, callback);
-            }
-        });
-    }
-};
+module.exports = { mlbpitchers: { teamShortCode, getPitchers } };
